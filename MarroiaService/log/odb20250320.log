@@ -42,3 +42,14 @@ Type domain.Flight is not enhanced.
 [2025-03-20 11:24:49 #3 type] 
 Type domain.ConcreteFlight is not enhanced.
 
+------------------------------------------------------------------------------------------------------------------------
+
+[2025-03-20 18:32:30 #1 store] 
+Database 'C:\Users\itxas\git\3Marroia\MarroiaService\flights.odb' is opened by 20156@Itxaso
+
+[2025-03-20 18:32:30 #2 type] 
+Type domain.Flight is not enhanced.
+
+[2025-03-20 18:32:30 #3 type] 
+Type domain.ConcreteFlight is not enhanced.
+

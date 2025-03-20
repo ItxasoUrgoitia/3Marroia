@@ -28,15 +28,24 @@ public interface FlightManager {
 
     /**
      * 
+     */
+    @WebMethod
+    @RequestWrapper(localName = "close", targetNamespace = "http://businessLogic/", className = "businessLogic.Close")
+    @ResponseWrapper(localName = "closeResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.CloseResponse")
+    @Action(input = "http://businessLogic/FlightManager/closeRequest", output = "http://businessLogic/FlightManager/closeResponse")
+    public void close();
+
+    /**
+     * 
      * @return
-     *     returns java.util.List<businessLogic.ConcreteFlight>
+     *     returns java.util.List<java.lang.String>
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getConcreteFlights2", targetNamespace = "http://businessLogic/", className = "businessLogic.GetConcreteFlights2")
-    @ResponseWrapper(localName = "getConcreteFlights2Response", targetNamespace = "http://businessLogic/", className = "businessLogic.GetConcreteFlights2Response")
-    @Action(input = "http://businessLogic/FlightManager/getConcreteFlights2Request", output = "http://businessLogic/FlightManager/getConcreteFlights2Response")
-    public List<ConcreteFlight> getConcreteFlights2();
+    @RequestWrapper(localName = "getAllDepartingCities", targetNamespace = "http://businessLogic/", className = "businessLogic.GetAllDepartingCities")
+    @ResponseWrapper(localName = "getAllDepartingCitiesResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetAllDepartingCitiesResponse")
+    @Action(input = "http://businessLogic/FlightManager/getAllDepartingCitiesRequest", output = "http://businessLogic/FlightManager/getAllDepartingCitiesResponse")
+    public List<String> getAllDepartingCities();
 
     /**
      * 
@@ -55,18 +64,6 @@ public interface FlightManager {
 
     /**
      * 
-     * @return
-     *     returns java.util.List<java.lang.String>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAllDepartingCities", targetNamespace = "http://businessLogic/", className = "businessLogic.GetAllDepartingCities")
-    @ResponseWrapper(localName = "getAllDepartingCitiesResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetAllDepartingCitiesResponse")
-    @Action(input = "http://businessLogic/FlightManager/getAllDepartingCitiesRequest", output = "http://businessLogic/FlightManager/getAllDepartingCitiesResponse")
-    public List<String> getAllDepartingCities();
-
-    /**
-     * 
      * @param arg0
      * @return
      *     returns java.util.List<businessLogic.ConcreteFlight>
@@ -79,6 +76,54 @@ public interface FlightManager {
     public List<ConcreteFlight> getDateConcreteFlights(
         @WebParam(name = "arg0", targetNamespace = "")
         XMLGregorianCalendar arg0);
+
+    /**
+     * 
+     * @return
+     *     returns java.util.List<businessLogic.Flight>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getFlights", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlights")
+    @ResponseWrapper(localName = "getFlightsResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlightsResponse")
+    @Action(input = "http://businessLogic/FlightManager/getFlightsRequest", output = "http://businessLogic/FlightManager/getFlightsResponse")
+    public List<Flight> getFlights();
+
+    /**
+     * 
+     * @param arg2
+     * @param arg1
+     * @param arg0
+     * @return
+     *     returns boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "bookSeat", targetNamespace = "http://businessLogic/", className = "businessLogic.BookSeat")
+    @ResponseWrapper(localName = "bookSeatResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.BookSeatResponse")
+    @Action(input = "http://businessLogic/FlightManager/bookSeatRequest", output = "http://businessLogic/FlightManager/bookSeatResponse")
+    public boolean bookSeat(
+        @WebParam(name = "arg0", targetNamespace = "")
+        ConcreteFlight arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1,
+        @WebParam(name = "arg2", targetNamespace = "")
+        int arg2);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns businessLogic.Flight
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getFlight", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlight")
+    @ResponseWrapper(localName = "getFlightResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlightResponse")
+    @Action(input = "http://businessLogic/FlightManager/getFlightRequest", output = "http://businessLogic/FlightManager/getFlightResponse")
+    public Flight getFlight(
+        @WebParam(name = "arg0", targetNamespace = "")
+        String arg0);
 
     /**
      * 
@@ -127,62 +172,5 @@ public interface FlightManager {
     public ConcreteFlight getConcreteFlight(
         @WebParam(name = "arg0", targetNamespace = "")
         String arg0);
-
-    /**
-     * 
-     * @param arg2
-     * @param arg1
-     * @param arg0
-     * @return
-     *     returns boolean
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "bookSeat", targetNamespace = "http://businessLogic/", className = "businessLogic.BookSeat")
-    @ResponseWrapper(localName = "bookSeatResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.BookSeatResponse")
-    @Action(input = "http://businessLogic/FlightManager/bookSeatRequest", output = "http://businessLogic/FlightManager/bookSeatResponse")
-    public boolean bookSeat(
-        @WebParam(name = "arg0", targetNamespace = "")
-        ConcreteFlight arg0,
-        @WebParam(name = "arg1", targetNamespace = "")
-        String arg1,
-        @WebParam(name = "arg2", targetNamespace = "")
-        int arg2);
-
-    /**
-     * 
-     * @return
-     *     returns java.util.List<businessLogic.Flight>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getFlights", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlights")
-    @ResponseWrapper(localName = "getFlightsResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlightsResponse")
-    @Action(input = "http://businessLogic/FlightManager/getFlightsRequest", output = "http://businessLogic/FlightManager/getFlightsResponse")
-    public List<Flight> getFlights();
-
-    /**
-     * 
-     * @param arg0
-     * @return
-     *     returns businessLogic.Flight
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getFlight", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlight")
-    @ResponseWrapper(localName = "getFlightResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.GetFlightResponse")
-    @Action(input = "http://businessLogic/FlightManager/getFlightRequest", output = "http://businessLogic/FlightManager/getFlightResponse")
-    public Flight getFlight(
-        @WebParam(name = "arg0", targetNamespace = "")
-        String arg0);
-
-    /**
-     * 
-     */
-    @WebMethod
-    @RequestWrapper(localName = "close", targetNamespace = "http://businessLogic/", className = "businessLogic.Close")
-    @ResponseWrapper(localName = "closeResponse", targetNamespace = "http://businessLogic/", className = "businessLogic.CloseResponse")
-    @Action(input = "http://businessLogic/FlightManager/closeRequest", output = "http://businessLogic/FlightManager/closeResponse")
-    public void close();
 
 }

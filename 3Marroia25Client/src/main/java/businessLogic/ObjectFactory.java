@@ -35,8 +35,6 @@ public class ObjectFactory {
     private final static QName _GetConcreteFlight_QNAME = new QName("http://businessLogic/", "getConcreteFlight");
     private final static QName _GetConcreteFlightResponse_QNAME = new QName("http://businessLogic/", "getConcreteFlightResponse");
     private final static QName _GetConcreteFlights_QNAME = new QName("http://businessLogic/", "getConcreteFlights");
-    private final static QName _GetConcreteFlights2_QNAME = new QName("http://businessLogic/", "getConcreteFlights2");
-    private final static QName _GetConcreteFlights2Response_QNAME = new QName("http://businessLogic/", "getConcreteFlights2Response");
     private final static QName _GetConcreteFlightsResponse_QNAME = new QName("http://businessLogic/", "getConcreteFlightsResponse");
     private final static QName _GetDateConcreteFlights_QNAME = new QName("http://businessLogic/", "getDateConcreteFlights");
     private final static QName _GetDateConcreteFlightsResponse_QNAME = new QName("http://businessLogic/", "getDateConcreteFlightsResponse");
@@ -140,22 +138,6 @@ public class ObjectFactory {
      */
     public GetConcreteFlights createGetConcreteFlights() {
         return new GetConcreteFlights();
-    }
-
-    /**
-     * Create an instance of {@link GetConcreteFlights2 }
-     * 
-     */
-    public GetConcreteFlights2 createGetConcreteFlights2() {
-        return new GetConcreteFlights2();
-    }
-
-    /**
-     * Create an instance of {@link GetConcreteFlights2Response }
-     * 
-     */
-    public GetConcreteFlights2Response createGetConcreteFlights2Response() {
-        return new GetConcreteFlights2Response();
     }
 
     /**
@@ -387,32 +369,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://businessLogic/", name = "getConcreteFlights")
     public JAXBElement<GetConcreteFlights> createGetConcreteFlights(GetConcreteFlights value) {
         return new JAXBElement<GetConcreteFlights>(_GetConcreteFlights_QNAME, GetConcreteFlights.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetConcreteFlights2 }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetConcreteFlights2 }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://businessLogic/", name = "getConcreteFlights2")
-    public JAXBElement<GetConcreteFlights2> createGetConcreteFlights2(GetConcreteFlights2 value) {
-        return new JAXBElement<GetConcreteFlights2>(_GetConcreteFlights2_QNAME, GetConcreteFlights2 .class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetConcreteFlights2Response }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link GetConcreteFlights2Response }{@code >}
-     */
-    @XmlElementDecl(namespace = "http://businessLogic/", name = "getConcreteFlights2Response")
-    public JAXBElement<GetConcreteFlights2Response> createGetConcreteFlights2Response(GetConcreteFlights2Response value) {
-        return new JAXBElement<GetConcreteFlights2Response>(_GetConcreteFlights2Response_QNAME, GetConcreteFlights2Response.class, null, value);
     }
 
     /**

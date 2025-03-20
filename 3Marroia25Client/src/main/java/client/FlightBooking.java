@@ -2,6 +2,7 @@ package client;
 
 
 import javax.swing.JPanel;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -27,6 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
 import businessLogic.*;
+//import service.FlightManager;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -35,6 +38,8 @@ import javax.swing.border.EmptyBorder;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 public class FlightBooking extends JFrame {
 	
@@ -91,9 +96,12 @@ public class FlightBooking extends JFrame {
 			public void run() {
 				try {
 					FlightBooking frame = new FlightBooking();
-					FlightManager businessLogic = new FlightManagerService();
+					URL url = new URL("http://localhost:9999/ws?wsdl");		
+					QName qname = new QName("http://service/","FlightManagerService");
+					Service service = Service.create(url, qname);
+					FlightManager businessLogic=service.getPort(FlightManager.class);
+					//FlightManager businessLogic = new FlightManagerService();
 					frame.setBusinessLogic(businessLogic);
-
 					//frame.setBusinessLogic(new FlightManagerService()); 
 					frame.initializeCombo();
 					
