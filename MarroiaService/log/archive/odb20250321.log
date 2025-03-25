@@ -1,0 +1,25 @@
+------------------------------------------------------------------------------------------------------------------------
+
+[2025-03-21 10:47:54 #1 store] 
+Database 'C:\Users\itxas\git\3Marroia\MarroiaService\flights.odb' is opened by 8596@Itxaso
+
+[2025-03-21 10:47:54 #2 type] 
+Type domain.Flight is not enhanced.
+
+[2025-03-21 10:47:54 #3 type] 
+Type domain.ConcreteFlight is not enhanced.
+
+[2025-03-21 10:49:37 #4 store] 
+Database 'C:\Users\itxas\git\3Marroia\MarroiaService\flights.odb' is closed by 8596@Itxaso
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2025-03-21 11:17:20 #1 store] 
+Database 'C:\Users\itxas\git\3Marroia\MarroiaService\flights.odb' is opened by 22772@Itxaso
+
+[2025-03-21 11:17:21 #2 type] 
+Type domain.Flight is not enhanced.
+
+[2025-03-21 11:17:21 #3 type] 
+Type domain.ConcreteFlight is not enhanced.
+

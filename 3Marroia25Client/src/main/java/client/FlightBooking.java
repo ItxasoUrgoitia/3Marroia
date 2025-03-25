@@ -3,6 +3,7 @@ package client;
 
 import javax.swing.JPanel;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -97,7 +98,7 @@ public class FlightBooking extends JFrame {
 				try {
 					FlightBooking frame = new FlightBooking();
 					URL url = new URL("http://localhost:9999/ws?wsdl");		
-					QName qname = new QName("http://service/","FlightManagerService");
+					QName qname = new QName("http://businessLogic/","FlightManagerService");
 					Service service = Service.create(url, qname);
 					FlightManager businessLogic=service.getPort(FlightManager.class);
 					//FlightManager businessLogic = new FlightManagerService();

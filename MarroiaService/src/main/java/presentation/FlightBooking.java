@@ -2,16 +2,14 @@ package presentation;
 
 
 import javax.swing.JPanel;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import java.awt.EventQueue;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.sql.SQLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -20,17 +18,19 @@ import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
 import businessLogic.FlightManager;
+import businessLogic.FlightManagerInterface;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.border.EmptyBorder;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 import domain.ConcreteFlight;
 
@@ -61,7 +61,10 @@ public class FlightBooking extends JFrame {
 	private ButtonGroup fareButtonGroup = new ButtonGroup();  
 	
 	private JButton lookforFlights = null;
+	//private DefaultListModel<ConcreteFlight> flightInfo = new DefaultListModel<ConcreteFlight>();
 
+	
+	//private JList<ConcreteFlight> flightList = null;
 	private JButton bookFlight = null;
 	
 	
@@ -73,7 +76,7 @@ public class FlightBooking extends JFrame {
 	
 	private Collection<ConcreteFlight> concreteFlightCollection;
 	
-	private FlightManager businessLogic = null;  //  @jve:decl-index=0:;
+	private FlightManagerInterface businessLogic;  //  @jve:decl-index=0:;
 	
 	private ConcreteFlight selectedConcreteFlight;
 	private final JComboBox flightListComboBox = new JComboBox();
@@ -88,10 +91,12 @@ public class FlightBooking extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FlightBooking frame = new FlightBooking();
-					frame.setBusinessLogic(new FlightManager());
-					frame.initializeCombo();
-					
+					URL url = new URL("http://localhost:9999/ws?wsdl");
+					QName qname = new QName("http://businessLogic/","FlightManagerService");
+					Service service = Service.create(url, qname);
+					FlightManagerInterface facade=service.getPort(FlightManagerInterface.class);
+					FlightBooking frame = new FlightBooking(facade);
+					//frame.setBusinessLogic(facade);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -100,7 +105,8 @@ public class FlightBooking extends JFrame {
 		});
 	}
 	
-	public void setBusinessLogic(FlightManager g) {businessLogic = g;}
+	//Custom operations
+	public void setBusinessLogic(FlightManagerInterface g) {businessLogic = g;}
 	
 	private Date newDate(int year,int month,int day) {
 
@@ -110,37 +116,13 @@ public class FlightBooking extends JFrame {
 
 	     return calendar.getTime();
 	}
-	
-	
-	private void initializeCombo() {
-		
-		List<String> departingCities = businessLogic.getAllDepartingCities();
-		DefaultComboBoxModel<String> departCityNames = new DefaultComboBoxModel<>();
-		for (String dp : departingCities) {
-			departCityNames.addElement(dp);
-		}
-		
-		departCity.setModel(departCityNames);
-		departCity.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				List<String> arrivingCities = businessLogic.getArrivalCitiesFrom((String) departCity.getSelectedItem());
-				arrivalCityNames.removeAllElements();
-				for (String city : arrivingCities) {
-					arrivalCityNames.addElement(city);
-				}
-				}
-		});
-		
-	}
-	
-	
 	/**
 	 * Create the frame
 	 * 
 	 * @return void
 	 */
-	private  FlightBooking() {
+	private  FlightBooking(FlightManagerInterface g) {
+		businessLogic=g;
 		
 		setTitle("Book Flight");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -154,19 +136,30 @@ public class FlightBooking extends JFrame {
 		lblDepartCity.setBounds(21, 11, 103, 16);
 		contentPane.add(lblDepartCity);
 		
-	
-		// ARRIVALS
+		departCity = new JComboBox<String>();
+		departCity.setBounds(99, 6, 243, 26);
+		contentPane.add(departCity);
+		//FlightManager fm = new FlightManager();
+		List<String> departingCities = businessLogic.getAllDepartingCities();
+		DefaultComboBoxModel<String> departCityNames = new DefaultComboBoxModel<>();
+		for (String dp : departingCities) {
+		departCityNames.addElement(dp);
+		}
+		departCity.setModel(departCityNames);
+		departCity.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		List<String> arrivingCities = businessLogic.getArrivalCitiesFrom((String) departCity.getSelectedItem());
+		arrivalCityNames.removeAllElements();
+		for (String city : arrivingCities) {
+		arrivalCityNames.addElement(city);
+		}
+		}
+		});
 		arrivalCity = new JComboBox<String>();
 		arrivalCity.setBounds(99, 34, 243, 26);
 		contentPane.add(arrivalCity);
 		arrivalCity.setModel(arrivalCityNames);
-		
-		
-		// DEPARTURES
-		departCity = new JComboBox<String>();
-		departCity.setBounds(99, 6, 243, 26);
-		contentPane.add(departCity);
-		
 		
 		
 		lblYear = new JLabel("Year:");
@@ -233,12 +226,13 @@ public class FlightBooking extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					bookFlight.setEnabled(true);
+					//flightInfo.clear();
 					flightListComboBox.removeAllItems();
 					bookFlight.setText("");
 					
 					java.util.Date date =newDate(Integer.parseInt(year.getText()),months.getSelectedIndex(),Integer.parseInt(day.getText()));
 					 
-					concreteFlightCollection=businessLogic.getConcreteFlights((String) departCity.getSelectedItem(),(String)arrivalCity.getSelectedItem(),date);
+					concreteFlightCollection=businessLogic.getConcreteFlights2((String) departCity.getSelectedItem(),(String)arrivalCity.getSelectedItem(),date);
 					Iterator<ConcreteFlight> flights=concreteFlightCollection.iterator();
 					while (flights.hasNext()) 
 						flightListComboBox.addItem(flights.next()); 
@@ -264,7 +258,7 @@ public class FlightBooking extends JFrame {
                 if (selectedConcreteFlight != null) {
                     bookFlight.setEnabled(true);
                     bookFlight.setText("Book: " + selectedConcreteFlight);
-                    bussinesTicket.setEnabled(selectedConcreteFlight.getBussinesNumber() > 0);
+                    bussinesTicket.setEnabled(selectedConcreteFlight.getBusinessNumber() > 0);
                     firstTicket.setEnabled(selectedConcreteFlight.getFirstNumber() > 0);
                     touristTicket.setEnabled(selectedConcreteFlight.getTouristNumber() > 0);
                 } else {
@@ -275,30 +269,29 @@ public class FlightBooking extends JFrame {
         });
 
 		flightListComboBox.setBounds(64, 159, 336, 71);
+		//flightListComboBox.setKeySelectionManager(flightList);
 		contentPane.add(flightListComboBox);
 		
 		bookFlight = new JButton("");
 		bookFlight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int num=0;
-				boolean ok = true;
+				boolean error=false;
 				String type;
-				int numOfSeatsToBook = 1;
-				
 				if (bussinesTicket.isSelected()) {
 					type = "business";
-					ok = businessLogic.bookSeat(selectedConcreteFlight, type, numOfSeatsToBook); 
+					error = businessLogic.bookSeat(selectedConcreteFlight, type); 
 				}
 				if (firstTicket.isSelected()) {
 					type = "first";
-					ok = businessLogic.bookSeat(selectedConcreteFlight, type, numOfSeatsToBook); 
+					error = businessLogic.bookSeat(selectedConcreteFlight, type); 
 				}
 				if (touristTicket.isSelected()) {
 					type = "tourist";
-					ok = businessLogic.bookSeat(selectedConcreteFlight, type, numOfSeatsToBook);
+					error = businessLogic.bookSeat(selectedConcreteFlight, type);
 				}
 				
-				if (!ok) bookFlight.setText("Error: There were no seats available!");
+				if (!error) bookFlight.setText("Error: There were no seats available!");
 				else{
 					bookFlight.setText("Booked. #seat left: "+(num-1));
 					bussinesTicket.setEnabled(false);
@@ -309,6 +302,7 @@ public class FlightBooking extends JFrame {
 				}
 			}
 		});
+		
 		flightListComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (flightListComboBox.getSelectedItem() != null) {
@@ -333,14 +327,5 @@ public class FlightBooking extends JFrame {
 		searchResult.setBounds(57, 130, 314, 16);
 		contentPane.add(searchResult);
 		
-		addWindowListener(new WindowAdapter() {
-	        @Override
-	        public void windowClosing(WindowEvent e) {
-	            if (businessLogic != null) {
-	                businessLogic.close();
-	                System.out.println("DataBase sucessfully closed.");
-	            }
-	        }
-	    });
 	}
 }  //  @jve:decl-index=0:visual-constraint="18,9"
